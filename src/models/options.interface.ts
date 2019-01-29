@@ -6,6 +6,7 @@ export interface IBrowserlessServerConfiguration {
   host: string | undefined;
   port: number;
   token: string | null;
+  launchNotificationURL: string | null;
   rejectAlertURL: string | null;
   queuedAlertURL: string | null;
   timeoutAlertURL: string | null;

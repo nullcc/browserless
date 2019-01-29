@@ -19,6 +19,7 @@ export const defaultParams = (): IBrowserlessOptions => ({
   healthFailureURL: null,
   host: '',
   keepAlive: false,
+  launchNotificationURL: null,
   maxCPU: 100,
   maxChromeRefreshRetries: 1,
   maxConcurrentSessions: 1,

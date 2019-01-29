@@ -34,6 +34,7 @@ const enableXvfb =              parseParam(process.env.ENABLE_XVBF, false);
 const exitOnHealthFailure =     parseParam(process.env.EXIT_ON_HEALTH_FAILURE, false);
 const host =                    process.env.HOST;
 const token =                   process.env.TOKEN || null;
+const launchNotificationURL =   process.env.LAUNCH_NOTIFICATION_URL || null;
 const queuedAlertURL =          process.env.QUEUE_ALERT_URL || null;
 const rejectAlertURL =          process.env.REJECT_ALERT_URL || null;
 const timeoutAlertURL =         process.env.TIMEOUT_ALERT_URL || null;
@@ -57,6 +58,7 @@ new BrowserlessServer({
   healthFailureURL,
   host,
   keepAlive,
+  launchNotificationURL,
   maxCPU,
   maxChromeRefreshRetries,
   maxConcurrentSessions,

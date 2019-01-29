@@ -35,6 +35,7 @@ const webDriverPath = '/webdriver/session';
 
 export class BrowserlessServer {
   public currentStat: IBrowserlessStats;
+  public readonly launchHook: () => void;
   public readonly rejectHook: () => void;
   public readonly queueHook: () => void;
   public readonly timeoutHook: () => void;
@@ -89,6 +90,26 @@ export class BrowserlessServer {
         process.exit(1);
       }
     }
+
+    this.launchHook = opts.launchNotificationURL ?
+      _.debounce(() => {
+        debug(`Calling web-hook for launching: ${opts.launchNotificationURL}`);
+        request({
+          url: opts.launchNotificationURL,
+          method: 'POST',
+          json: true,
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: {
+            host: this.config.host,
+            port: this.config.port,
+            maxConcurrentSessions: this.config.maxConcurrentSessions,
+          },
+        });
+        // request(`${opts.launchNotificationURL}?port=${this.config.port}`, _.noop);
+      }, thirtyMinutes, debounceOpts) :
+      _.noop;
 
     this.queueHook = opts.queuedAlertURL ?
       _.debounce(() => {
@@ -222,7 +243,10 @@ export class BrowserlessServer {
         })
         .on('upgrade', asyncMiddleware(this.chromeService.runWebSocket.bind(this.chromeService)))
         .setTimeout(httpTimeout)
-        .listen(this.config.port, this.config.host, resolve);
+        .listen(this.config.port, this.config.host, async () => {
+          await this.launchHook();
+          resolve();
+        });
     });
   }
 
