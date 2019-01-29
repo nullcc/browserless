@@ -95,17 +95,17 @@ export class BrowserlessServer {
       _.debounce(() => {
         debug(`Calling web-hook for launching: ${opts.launchNotificationURL}`);
         request({
-          url: opts.launchNotificationURL,
-          method: 'POST',
-          json: true,
+          body: {
+            host: this.config.host,
+            maxConcurrentSessions: this.config.maxConcurrentSessions,
+            port: this.config.port,
+          },
           headers: {
             'content-type': 'application/json',
           },
-          body: {
-            host: this.config.host,
-            port: this.config.port,
-            maxConcurrentSessions: this.config.maxConcurrentSessions,
-          },
+          json: true,
+          method: 'POST',
+          url: opts.launchNotificationURL,
         });
         // request(`${opts.launchNotificationURL}?port=${this.config.port}`, _.noop);
       }, thirtyMinutes, debounceOpts) :
