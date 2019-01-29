@@ -107,7 +107,6 @@ export class BrowserlessServer {
           method: 'POST',
           url: opts.launchNotificationURL,
         });
-        // request(`${opts.launchNotificationURL}?port=${this.config.port}`, _.noop);
       }, thirtyMinutes, debounceOpts) :
       _.noop;
 
